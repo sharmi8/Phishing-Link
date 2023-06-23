@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Detection</title>
+</head>
+
+<body>
+    <div> Enter Link </div>
+    <input id="urlInput">
+    <button onclick="fetchData()">Check</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function fetchData() {
+            const urlInput = document.getElementById('urlInput');
+            const url = `https://phishing-url-risk-api.p.rapidapi.com/url/?url=${urlInput.value}`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'f1ca338caemsh9cfa5ff67248a2fp191327jsn59ee55ff9094',
+                    'X-RapidAPI-Host': 'phishing-url-risk-api.p.rapidapi.com'
+                }
+            };
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+
+                displayResult(data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function displayResult(data) {
+            const resultDiv = document.getElementById('result');
+
+            // Clear previous result
+            resultDiv.textContent = '';
+               
+            // Check if the link is considered a phishing link
+            if (data[0].Ai_model_phishing_risk_class === 'Risky Url') {
+               
+                resultDiv.textContent = 'The link is identified as a phishing link.';
+            } else {
+                resultDiv.textContent = 'The link is not identified as a phishing link.';
+            }
+        }
+    </script>
+</body>
+
+</html>
